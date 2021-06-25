@@ -1,15 +1,20 @@
 from numpy import random
 from numpy.lib.utils import safe_eval
 
+# All stats
 STATS = ["PS", "ATK", "DEF", "SATK", "SDEF", "VEL"]
+
+# List of natures
 NATS = ["Activa", "Afable", "Agitada", "Alegre", "Alocada", "Amable", "Audaz", "Cauta", "Docil", "Firme", "Floja", "Fuerte",
 "Grosera", "Huraña", "Ingenua", "Mansa", "Miedosa", "Modesta", "Osada", "Picara", "Placida", "Rara", "Serena", "Seria", "Timida"]
 
+# Pokemon are dictionaries -> change to Class
 def create_pkmn(gender, PS, Atk, Def, SAtk, SDef, Vel, Nature, Obj=None):
     return {"GENDER": gender, "PS": PS, "ATK": Atk, "DEF": Def, "SATK": SAtk, "SDEF": SDef, "VEL": Vel, "NAT": Nature, "OBJ": Obj}
 
 
 def siblingIVs(pokemon1, pokemon2, num_inhIVs):
+    """ Choose num_inhIVs (3 or 5) from the parents and the rest IVs are random. """
     IVs = {}
     inhIVs = random.choice(STATS, num_inhIVs, replace=False)
     noninhIVs = list(set(STATS) - set(inhIVs))
@@ -31,8 +36,9 @@ def siblingIVs(pokemon1, pokemon2, num_inhIVs):
 
 
 def breed(pokemon1, pokemon2, pfemale=0.5):
+    """ Determines number of inherited IVs, gender and nature. """
 
-    if (pokemon1['OBJ'] == 'DK') or (pokemon2['OBJ'] == 'DK'):
+    if (pokemon1['OBJ'] == 'DK') or (pokemon2['OBJ'] == 'DK'):    # Destiny Knot. Inherit 5 stats.
         num_inhIVs = 5
     else:
         num_inhIVs = 3
@@ -57,6 +63,7 @@ def breed(pokemon1, pokemon2, pfemale=0.5):
 
 
 def check_sibling(test_sibling, goal_pkmn):
+    """Checks if we obtained the desired Pokémon"""
     checkpoints = STATS + ['GENDER', 'NAT']
 
     for item in checkpoints:
